@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    #options {
+      margin-top: 20px;
+    }
+
+    #teacher, #student {
+      padding: 10px;
+      margin: 10px;
+      width: 200px;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    #teacher {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    #student {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>IT ATTENDANCE SYSTEM</h1>
+  <div id="options">
+    <a href="{{ url_for('admin_login') }}"><button id="teacher">Continue as a Teacher</button></a>
+    <a href="{{ url_for('login') }}"><button id="student">Continue as a Student</button></a>
+  </div>
+</body>
+</html>

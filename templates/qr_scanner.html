@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Scanner</title>
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    #preview {
+      width: 100%;
+      max-width: 480px;
+      height: auto;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+    }
+
+    #profile {
+      margin-top: 20px;
+    }
+
+    #profileText {
+      margin-bottom: 10px;
+    }
+
+    #logout,
+    #viewProfile {
+      padding: 10px;
+      margin-top: 10px;
+      width: 150px;
+      cursor: pointer;
+      box-sizing: border-box;
+      display: inline-block;
+    }
+
+    #logout {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+    }
+
+    #viewProfile {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 600px;
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #modalClose {
+      color: #ccc;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal-header {
+      padding: 2px 16px;
+      background-color: #5cb85c;
+      color: white;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .modal-body {
+      padding: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>QR Scanner</h1>
+  <video id="preview"></video>
+  <div id="profile">
+    <p id="profileText">Loading profile...</p>
+    <button id="viewProfile" onclick="openProfileModal()">View Profile</button>
+    <button id="logout" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- The Modal -->
+  <div id="profileModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span id="modalClose" onclick="closeProfileModal()">&times;</span>
+      <h2>User Profile</h2>
+      <div id="modalProfileText">Loading profile...</div>
+    </div>
+  </div>
+
+  <script>
+    let scanner;
+
+    // Function to initialize the QR scanner
+    function initializeQRScanner() {
+      console.log('Initializing QR scanner...');
+
+      // Access the rear camera
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } })
+        .then(function (stream) {
+          preview.srcObject = stream;
+          preview.play();
+
+          // Create an Instascan scanner with the video stream
+          scanner = new Instascan.Scanner({
+            video: preview,
+            mirror: false, // Set mirror to false to use the rear camera
+          });
+
+          scanner.addListener('scan', function (content) {
+            // Handle the detected QR code result (send it to the server)
+            sendQRCodeToServer(content);
+          });
+
+          Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+              // Use the rear camera (cameras[0])
+              scanner.start(cameras[0]);
+            } else {
+              console.error('No cameras found.');
+            }
+          }).catch(function (e) {
+            console.error(e);
+          });
+        })
+        .catch(function (error) {
+          console.error('Error accessing the camera:', error);
+        });
+
+      getUserProfile();  // Load user profile
+    }
+
+    // Function to send the detected QR code to the server
+    function sendQRCodeToServer(qrCode) {
+    console.log('QR code detected:', qrCode);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/process_qr_code", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var response = JSON.parse(xhr.responseText);
+
+        if (response.message === 'QR code processed successfully') {
+          // Display success message using SweetAlert
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Attendance marked successfully!",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } else {
+          // Display error message using SweetAlert
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Invalid QR code. Your attendance has not been marked.",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      }
+    };
+    xhr.send(JSON.stringify({ qr_code: qrCode }));
+  }
+
+
+    function closeProfileModal() {
+      var modal = document.getElementById('profileModal');
+      modal.style.display = 'none';
+    }
+
+    function getUserProfile() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/profile", true);
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+              if (xhr.status == 200) {
+                  var profile = JSON.parse(xhr.responseText);
+                  document.getElementById('profileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no;
+                 // document.getElementById('modalProfileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no + ', user_ip: ' + profile.ip_address + ' , MAC Address: ' + profile.mac_address;
+                  document.getElementById('modalProfileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no + ', Device name: ' + profile.device_name ;
+              } else {
+                  console.error('Failed to retrieve user profile');
+              }
+          }
+      };
+      xhr.send();
+  }
+  
+    
+
+    function logout() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/logout", true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          window.location.href = '/login';
+        }
+      };
+      xhr.send();
+    }
+
+    function openProfileModal() {
+      getUserProfile();  // Update user profile before opening modal
+      var modal = document.getElementById('profileModal');
+      modal.style.display = 'block';
+    }
+
+    // Call the initialization function
+    initializeQRScanner();
+    console.log('User IP:', "{{ session.get('user_ip') }}");
+  </script>
+
+</body>
+
+</html>

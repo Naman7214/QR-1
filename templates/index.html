@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>QR Attendance System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 50px;
+        }
+
+        #qrCode {
+            width: 800px;
+            height: 800px;
+            margin-bottom: 50px;
+        }
+
+        p {
+            color: #777;
+            font-size: 18px;
+        }
+
+        .back-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>QR Attendance System</h1>
+    <img id="qrCode" src="data:image/png;base64,{{ qr_image }}" alt="QR Code">
+    <p>Scan the QR code to mark your attendance.</p>
+
+    <!-- Added button to redirect to admin_options -->
+    <a href="/admin_options" class="back-button">Back to Admin Options</a>
+</body>
+<script>
+    function updateQRCode() {
+        var img = new Image();
+        img.src = '/qr_image?' + new Date().getTime();
+        document.getElementById('qrCode').src = img.src;
+    }
+
+    function generateQRCode() {
+        // Call the /generate_qr_code route to generate a new QR code
+        fetch('/generate_qr_code')
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                updateQRCode(); // Update the QR code after generating a new one
+            });
+    }
+
+    // Initial call to generate and display the QR code
+    generateQRCode();
+
+    // Set interval to update QR code every 20 seconds
+    setInterval(generateQRCode, 5000);
+</script>
+</html>

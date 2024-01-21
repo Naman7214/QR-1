@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timetable</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+  <style>
+    /* Optional: Add some additional styling for better visibility */
+    h1{
+      text-align: center;
+    }
+    body{
+      background-color: #D3E3F1;
+    }
+    table {
+      border-collapse: collapse;
+      width: 50%;
+      margin: auto;
+      background-color: #fff;
+    }
+
+    th,
+    td {
+      text-align: center;
+      padding: 8px 0px 8px 0px;
+      border: 1px solid black;
+      /* width: 80px; */
+    }
+
+    td {
+      transition: background-color 0.3s ease-in-out;
+      width: 80px;
+    }
+
+    tr>td:nth-child(1) {
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      display: block;
+    }
+
+    td:hover {
+      background-color: rgb(167, 209, 246);
+    }
+
+    .table-container {
+      display: none;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .table-container.active {
+      display: block;
+    }
+
+    /* Style for radio buttons */
+    input[type="radio"] {
+      opacity: 0;
+      /* Hide default radio button */
+    }
+
+    input[type="radio"]+label {
+      position: relative;
+      padding-left: 30px;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 24px;
+      font-size: 16px;
+    }
+
+    input[type="radio"]+label:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgb(37, 141, 233);
+      background-color: #fff;
+      border-radius: 50%;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    input[type="radio"]:checked+label:before {
+      background-color: rgb(167, 209, 246);
+    }
+
+    .toggles {
+      margin: 20px;
+      text-align: center;
+    }
+
+    /* Style for home button */
+.home-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #3498db;
+  border: 1px solid #2980b9;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.home-button:hover {
+  background-color: #2980b9;
+}
+table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: auto;
+  background-color: #fff;
+  margin-top: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  text-align: center;
+  padding: 15px 10px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #3498db;
+  color: #fff;
+}
+
+td {
+  transition: background-color 0.3s ease-in-out;
+}
+
+tr>td:nth-child(1) {
+  font-weight: bold;
+}
+
+td:hover {
+  background-color: rgb(167, 209, 246);
+}
+
+/* Style for breaks */
+.break-cell {
+  background-color: rgb(200, 212, 222);
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Style for links inside cells */
+td a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  table {
+    width: 100%;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <h1>TE Class Timetable</h1>
+  <button class="home-button" onclick="redirectToAdminOptions()">Home</button>
+
+  <div class="toggles">
+    <input type="radio" name="timetable" value="SE" id="seRadio" />
+    <label for="seRadio">SE</label>
+    <input type="radio" name="timetable" value="TE" id="teRadio" checked />
+    <label for="teRadio">TE</label>
+    <input type="radio" name="timetable" value="BE" id="beRadio" />
+    <label for="beRadio">BE</label>
+  </div>
+  <div class="table-container te-table active">
+  <table border="1" class = "timetable-table">
+    <tr>
+      <th>Time</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
+      <th>Saturday</th>
+    </tr>
+    {% for time_slot in ['09:00 - 10:00', '10:00 - 11:00', '11:00 - 11:15', '11:15 - 12:15', '12:15 - 01:15', '01:15 - 02:00', '02:00 - 03:00','03:00 - 04:00','04:00 - 05:00'] %}
+    <tr>
+      <td>{{ time_slot }}</td>
+      {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] %}
+        <!-- {% if day == 'Saturday' and time_slot == '09:00 - 10:00' %}
+          <td rowspan="8" style="text-align: center">Additional Activites</td>
+        {% endif %} -->
+        {% if time_slot == '11:00 - 11:15' or time_slot == '01:15 - 02:00' %}
+          {% if day == 'Monday' %}
+            <td colspan="6" style="background-color: rgb(200, 212, 222); text-align: center;">
+              {% if time_slot == '11:00 - 11:15' %}
+                Short Break
+              {% elif time_slot == '01:15 - 02:00' %}
+                Long Break
+              {% endif %}
+            </td>
+          {% endif %}
+        {% else %}
+          <td>
+            {% for entry in timetable_data %}
+              {% if entry.day == day and entry.time_slot == time_slot %}
+                {% if entry.instructor is not none %}
+                  <a onclick='confirmNavigation("{{ entry.subject }}", "{{ entry.time_slot }}")'>
+                    {{ entry.subject }} <br>
+                    {% if entry.instructor != null %}{{ entry.instructor }} <br>{% endif %}
+                  </a>
+                {% else %}
+                  <a onclick='confirmNavigation("{{ entry.subject }}", "{{ entry.time_slot }}")'>
+                    {{ entry.subject }} <br>
+                  </a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </td>
+        {% endif %}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+        var radioButtons = document.getElementsByName("timetable");
+
+        radioButtons.forEach(function (radioButton) {
+            radioButton.addEventListener("click", function () {
+                // Get the value of the selected radio button
+                var selectedValue = this.value;
+
+                // Construct the URL based on the selected value
+                var url = "/" + selectedValue.toLowerCase() + "_tt";
+
+                // Navigate to the constructed URL
+                window.location.href = url;
+            });
+        });
+    });
+
+  function confirmNavigation(course, time) {
+    const excludedCourses = [
+    "Additional Activites",
+    "Practical",
+    "Honors Course",
+    "InternShip Review",
+    "Expert Session or Add on course",
+    "ACM/ITSA/IT tech Club",
+    "Audit Course",
+    "None",
+  ];
+  const currentClass = document.querySelector('input[name="timetable"]:checked').value;
+
+  // Check if the clicked course is in the excludedCourses list
+  if (excludedCourses.includes(course)) {
+    return null; // Do nothing for excluded courses
+  }
+
+    if (course === "Elective 2") {
+      Swal.fire({
+        title: "Select Elective Subject",
+        input: "select",
+        inputOptions: {
+          CC: "Cloud Computing",
+          CS: "Cybersecurity",
+        },
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Confirm",
+        inputValidator: (value) => {
+          if (!value) {
+            return "Please select an elective subject";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const selectedSubject = result.value;
+          const currentDate = new Date().toISOString().split("T")[0];
+          const url = `input?year=${currentClass}&subject_name=${selectedSubject}&time_slot=${time}&date=${currentDate}`;
+          console.log(url);
+          // Do something with the updated URL, e.g., navigate to the new URL
+
+          Swal.fire({
+            title: "Creating QR for " + selectedSubject,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, continue!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Uncomment the line below to navigate to the next page
+              window.location.href = url;
+            }
+          });
+        }
+      });
+    }
+
+    else if (course === "Elective 5") {
+      Swal.fire({
+        title: "Select Elective Subject",
+        input: "select",
+        inputOptions: {
+          NLP: "Natural Language Processing",
+          SC: "Social Computing",
+        },
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Confirm",
+        inputValidator: (value) => {
+          if (!value) {
+            return "Please select an elective subject";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const selectedSubject = result.value;
+          const currentDate = new Date().toISOString().split("T")[0];
+          const url = `input?year=${currentClass}&subject_name=${selectedSubject}&time_slot=${time}&date=${currentDate}`;
+
+          // Do something with the updated URL, e.g., navigate to the new URL
+
+          Swal.fire({
+            title: "Creating QR for " + selectedSubject,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, continue!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Uncomment the line below to navigate to the next page
+              window.location.href = url;
+            }
+          });
+        }
+      });
+    }
+
+
+    else if (course === "Elective 6") {
+      Swal.fire({
+        title: "Select Elective Subject",
+        input: "select",
+        inputOptions: {
+          BAI: "Business Analytics and Intelligence",
+          BT: "BlockChain Technology",
+        },
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Confirm",
+        inputValidator: (value) => {
+          if (!value) {
+            return "Please select an elective subject";
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const selectedSubject = result.value;
+          const currentDate = new Date().toISOString().split("T")[0];
+          const url = `input?year=${currentClass}&subject_name=${selectedSubject}&time_slot=${time}&date=${currentDate}`;
+
+          // Do something with the updated URL, e.g., navigate to the new URL
+
+          Swal.fire({
+            title: "Creating QR for " + selectedSubject,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, continue!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Uncomment the line below to navigate to the next page
+              window.location.href = url;
+            }
+          });
+        }
+      });
+    }
+
+
+    else {
+      // The code below this line will only execute for non-elective courses
+      const currentDate = new Date().toISOString().split("T")[0];
+      const url = `input?year=${currentClass}&subject_name=${course}&time_slot=${time}&date=${currentDate}`;
+      // Do something with the URL for non-elective courses, e.g., navigate to the URL
+
+      Swal.fire({
+        title: "Creating QR for " + course,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, continue!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Uncomment the line below to navigate to the next page
+          window.location.href = url;
+        }
+      });
+    }
+  }
+  function redirectToAdminOptions() {
+    window.location.href = "/admin_options";
+  }
+  
+
+
+</script>
+
+</html>

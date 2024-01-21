@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <title>Developer Information</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #D3E3F1;
+      text-align: center;
+    }
+
+    .developer-info {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: 50px auto;
+    }
+
+    h1 {
+      color: #3498db;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      color: #555;
+      font-size: 18px;
+      margin-bottom: 13px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    li {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .student-name {
+      margin-top: 10px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .social-icon {
+      margin: 0 10px;
+      color: #3498db;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .social-icon:hover {
+      color: #2980b9;
+    }
+
+    .back-link {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .back-link:hover {
+      color: #555;
+    }
+    li>span{
+      font-weight: 500;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="developer-info">
+    <h1>Developer Information</h1>
+    <p>Developed by the IT department, MMCOE</p>
+
+    <div>
+      <p>Under the guidance of:</p>
+      <ul>
+        <li>Dr. Rupali Chopade</li>
+        <li>Mr. Nikhil Dhavase</li>
+      </ul>
+    </div>
+
+    <div>
+      <p>Student Team:</p>
+      <ul>
+        <li>
+          <span class="student-name">Naman Agnihotri</span>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/namanagnihotri" target="_blank" class="social-icon">
+              <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="https://github.com/Naman7214" target="_blank" class="social-icon">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/naman-agnihotri-b8b814299" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <span class="student-name">Harshvardhan Grandhi</span>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/hvsgrandhi_0508" target="_blank" class="social-icon">
+              <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="https://github.com/hvsgrandhi" target="_blank" class="social-icon">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/harshvardhangrandhi" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <span class="student-name">Rohan Fargade</span>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/namanagnihotri" target="_blank" class="social-icon">
+              <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="https://github.com/Naman7214" target="_blank" class="social-icon">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/harshvardhangrandhi" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <span class="student-name">Ayush Gunjal</span>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/namanagnihotri" target="_blank" class="social-icon">
+              <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="https://github.com/Naman7214" target="_blank" class="social-icon">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/harshvardhangrandhi" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+          </div>
+        </li>
+        <li>
+          <span class="student-name">Atharva Patil</span>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/namanagnihotri" target="_blank" class="social-icon">
+              <i class="fab fa-instagram fa-lg"></i>
+            </a>
+            <a href="https://github.com/Naman7214" target="_blank" class="social-icon">
+              <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/harshvardhangrandhi" target="_blank" class="social-icon">
+              <i class="fab fa-linkedin-in fa-lg"></i>
+            </a>
+          </div>
+        </li>
+        <!-- Add similar sections for other team members -->
+      </ul>
+    </div>
+
+    <p><a href="/" class="back-link">Back to Main Page</a></p>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

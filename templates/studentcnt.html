@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</head>
+
+<style>
+    /* Add a custom class for narrower table */
+    .narrow-table {
+        width: 60%; /* Adjust the width as needed */
+        margin: auto; /* Center the table */
+        border: 1px solid black;
+    }
+
+    .border {
+        border: 6px solid black;
+        margin-top: 1rem; /* Adjust the margin-top value as needed */
+    }
+
+    .design {
+        display: flex;
+        gap: 10em;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9);
+        padding-top: 60px;
+        text-align: center;
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 600px;
+        background-color: #fefefe;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #modalClose {
+        color: #ccc;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #5cb85c;
+        color: white;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+    .toggle-button {
+        margin-top: 0.5rem;
+    }
+
+    /* Add a new style for displaying subject-wise attendance */
+    .attendance-summary {
+        margin-top: 1rem;
+    }
+
+</style>
+
+<body>
+    <div>
+        <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/admin_options">ITATS Dashboard</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <button class="btn" id="adminProfile" onclick="openAdminProfileModal()">
+                                <img src="/static/icon-1633249_1280.png" alt="Admin" height="40px"
+                                    style="filter: invert();">
+                            </button>
+                            <div id="profileModal" class="modal">
+                                <div class="modal-content">
+                                    <span id="modalClose" onclick="closeProfileModal()">&times;</span>
+                                    <h2>Admin Profile</h2>
+                                    <div id="modalProfileText">Loading profile...</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="border">
+                <form id="attendanceForm" method="post" action="/attendance_summary">
+
+                    <div class="design">
+                        <div>
+                            <label for="year">Year:</label>
+                            <select id="year" name="year" required class="form-select">
+                                <option value="SE">SE</option>
+                                <option value="TE">TE</option>
+                                <option value="BE">BE</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" required class="form-select">
+                        </div>
+                        <div>
+                            <button type="submit" class="btn-success btn">GO</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Display subject-wise attendance summary here -->
+                <div id="attendanceSummary" class="attendance-summary">
+                    <!-- Display subject-wise attendance summary here using JavaScript -->
+                </div>
+            </div>
+            <div id="averageCount" class="attendance-summary">
+    <!-- Display average count here using JavaScript -->
+</div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function getAdminProfile() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/admin_profile", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    var adminProfile = JSON.parse(xhr.responseText);
+
+                    // Display admin profile information
+                    document.getElementById('modalProfileText').innerText = 'Admin: ' + adminProfile.admin_username + ', Dept: ' + adminProfile.admin_dept + ', Class: ' + adminProfile.admin_class;
+                } else {
+                    console.error('Failed to retrieve admin profile');
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    // Function to open the admin profile modal
+    function openAdminProfileModal() {
+        getAdminProfile();  // Update admin profile before opening modal
+        var modal = document.getElementById('profileModal');
+        modal.style.display = 'block';
+    }
+
+    // Function to close the admin profile modal
+    function closeProfileModal() {
+        var modal = document.getElementById('profileModal');
+        modal.style.display = 'none';
+    }
+
+    // Initialize the admin profile
+    function initializeAdminProfile() {
+        console.log('Initializing Admin Profile...');
+        getAdminProfile();
+    }
+
+
+    function updateAttendanceSummary(data) {
+        var summaryContainer = document.getElementById('attendanceSummary');
+        summaryContainer.innerHTML = ''; // Clear previous content
+
+        // Create a table to display the attendance summary
+        var table = document.createElement('table');
+        table.className = 'table table-bordered narrow-table';
+
+        // Create table header
+        var headerRow = table.insertRow();
+        headerRow.innerHTML = '<th>Subject</th><th>Time Slot</th><th>Present Count</th><th>Absent Count</th>';
+
+        // Iterate over the subjects
+        for (var subject in data) {
+            if (data.hasOwnProperty(subject) && typeof data[subject] === 'object') {
+                // Iterate over the time slots for each subject
+                for (var timeSlot in data[subject]) {
+                    if (data[subject].hasOwnProperty(timeSlot) && typeof data[subject][timeSlot] === 'object') {
+                        // Create a row for each subject and time slot combination
+                        var row = table.insertRow();
+                        row.innerHTML = '<td>' + subject + '</td><td>' + timeSlot + '</td><td>' + data[subject][timeSlot]['present_count'] + '</td><td>' + data[subject][timeSlot]['absent_count'] + '</td>';
+                    }
+                }
+            }
+        }
+
+        // Append the table to the summary container
+        summaryContainer.appendChild(table);
+    }
+
+
+
+    // Function to handle the form submission
+    function handleFormSubmit(event) {
+        event.preventDefault(); // Prevent the form from submitting in the default way
+
+        // Get the selected date and year
+        var date = document.getElementById('date').value;
+        var year = document.getElementById('year').value;
+
+        // Fetch attendance summary for the selected date and year
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/attendance_summary', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Parse the JSON response and update the attendance summary
+                var data = JSON.parse(xhr.responseText);
+                if (!data || typeof data !== 'object') {
+                    alert('Error: Invalid data received. Please try again.');
+                    return;
+                }
+                updateAttendanceSummary(data);
+            }
+        };
+        xhr.send('date=' + date + '&year=' + year);
+    }
+
+    // Event listener for form submission
+    document.getElementById('attendanceForm').addEventListener('submit', handleFormSubmit);
+
+    // Call the initialization function
+    initializeAdminProfile();
+</script>
+
+</html>

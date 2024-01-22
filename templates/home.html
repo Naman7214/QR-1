@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>ITATS</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .left {
+            background-color: rgb(0, 118, 137);
+            ;
+            flex: 1;
+            height: 100vh;
+            color: white;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 4px 48px rgb(0, 0, 0);
+
+            /* Add position relative */
+        }
+
+        .right {
+            background-color: rgba(255, 255, 255, 0.836);
+            flex: 1;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* padding: 50px; */
+            /* background-color: #fff; */
+            /* border-radius: 8px; */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        #main {
+            font-weight: bold;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 0;
+            width: 91%;
+        }
+
+        .top {
+            display: flex;
+        }
+
+        .top>img {
+            width: 120px;
+            height: 120px;
+            margin: 5px 0 0 5px;
+        }
+
+        p {
+            text-align: center;
+            margin-bottom: 10px;
+            /* Add margin-bottom for spacing between paragraphs */
+        }
+
+        #project-name {
+            font-size: 3em;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 3rem;
+            text-align: left;
+            margin-left: 10px;
+            margin-bottom: 0;
+            text-shadow: -1px -1px 0 #000,
+                /* Top-left shadow */
+                1px -1px 0 #000,
+                /* Top-right shadow */
+                -1px 1px 0 #000,
+                /* Bottom-left shadow */
+                1px 1px 0 #000;
+            ;
+        }
+
+        @import url(https://fonts.googleapis.com/css?family=Khula:700);
+
+        .hidden {
+            opacity: 0;
+        }
+
+        .console-container {
+            font-family: Khula;
+            font-size: 2em;
+            text-align: left;
+            height: 200px;
+            width: 600px;
+            display: block;
+            color: white;
+            top: 0;
+            bottom: 0;
+            margin-left: 10px;
+            /* position: absolute; Change to absolute positioning */
+            /* bottom: 0; Align to the bottom */
+        }
+
+        .console-underscore {
+            display: inline-block;
+            position: relative;
+            top: -0.14em;
+            left: 10px;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            /* Adjust as needed */
+            text-align: center;
+            width: 100%;
+            color: white;
+        }
+
+        .hover {
+            color: #0000;
+            background:
+                radial-gradient(circle, rgb(0, 0, 0) 28%, rgb(0, 0, 255) 53%, rgb(0, 0, 0) 100%) var(--c, 0%)/200% no-repeat;
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: .5s;
+        }
+
+        .hover:hover {
+            --c: 100%;
+        }
+
+        h3 {
+            font-family: system-ui, sans-serif;
+            /* font-size: 3rem; */
+            cursor: pointer;
+        }
+
+        #teacher {
+            background-color: #001eff;
+        }
+
+        #student {
+            background-color: #001eff;
+        }
+
+        #teacher,
+        #student {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        #options {
+            margin-top: 20px;
+        }
+
+        @media only screen and (max-width: 768px) {
+        .left {
+            display: none; /* Hide the left div on small screens */
+        }
+
+        .right {
+            flex: 1;
+        }
+
+        .hovermobile {
+            display: inline-block;
+        }
+
+        .head1 {
+            display: flex;
+            flex-direction: column;
+            font-size: small;
+            font-weight: bold;
+            /* justify-content: center; */
+            align-items: center;
+        }
+
+        .head1>img {
+            height: 120px;
+            width: 120px;
+        }
+    }
+
+    @media only screen and (min-width: 769px) {
+        .hovermobile {
+            display: none;
+        }
+
+        .head1 {
+            display: none;
+        }
+    }
+
+        .hovermobile{
+            color: #0000;
+            background:
+                radial-gradient(circle, rgb(0, 0, 0) 28%, rgb(0, 0, 255) 53%, rgb(0, 0, 0) 100%) var(--c, 0%)/200% no-repeat;
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: .5s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="top">
+                <img src="/static/logo.webp" alt="logo">
+                <p id="main">Marathwada Mitramandal’s COLLEGE OF ENGINEERING Karvenagar, Pune</p>
+                
+            </div>
+            <!-- <p>Permanently Afiliated to SPPU | Accredited with ‘A++’ grade by NAAC | Recipient of ‘Best College’ award
+                by SPPU</p>
+            <p style="margin-bottom: 0;">Re Accredited by NBA ( Electrical Engg and Mechanical Engg) | Recognized under
+                2(f) and 12(B) of UGC Act
+                1956 | ISO 9001:2015 certified</p> -->
+            <p style="font-size: 1.5rem; font-weight: bold; margin-top: 5px;">Developed by IT Department</p>
+            <p id="project-name">ITATS:</p> <!-- Highlighted project name -->
+            <div class='console-container'><span id='text'></span>
+                <div class='console-underscore' id='console'>&#95;</div>
+            </div>
+
+            <footer>
+                <h3> <a href="/developers" class="hover">Developer Information Here</a></h3>
+            </footer>
+        </div>
+        <div class="right">
+            <div class="head1">
+                <img src="/static/logo.webp" alt="logo">
+                <p>Marathwada Mitramandal’s COLLEGE OF ENGINEERING Karvenagar, Pune</p>
+                <h1 style="text-align: center;">ITATS - QR Based Attendance System</h1>
+            </div>
+            <div id="options">
+                <a href="{{ url_for('admin_login') }}"><button id="teacher">Continue as a Teacher</button></a>
+                <a href="{{ url_for('login') }}"><button id="student">Continue as a Student</button></a>
+            </div>
+            <footer>
+                <h3 > <a href="/developers" class="hovermobile" >Developer Information Here</a></h3>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // function([string1, string2],target id,[color1,color2])    
+        consoleText(['IT Attendance Management System', 'Real-time attendance, no room for fakes', 'Student-Crafted Excellence', 'Scan, Sync, Succeed: ITATS revolutionizes attendance', 'Smart Attendance, Smarter Dashboard', 'Effortless Analytics'], 'text', ['lightblue']);
+
+        function consoleText(words, id, colors) {
+            if (colors === undefined) colors = ['#fff'];
+            var visible = true;
+            var con = document.getElementById('console');
+            var letterCount = 1;
+            var x = 1;
+            var waiting = false;
+            var target = document.getElementById(id)
+            target.setAttribute('style', 'color:' + colors[0])
+            window.setInterval(function () {
+
+                if (letterCount === 0 && waiting === false) {
+                    waiting = true;
+                    target.innerHTML = words[0].substring(0, letterCount)
+                    window.setTimeout(function () {
+                        var usedColor = colors.shift();
+                        colors.push(usedColor);
+                        var usedWord = words.shift();
+                        words.push(usedWord);
+                        x = 1;
+                        target.setAttribute('style', 'color:' + colors[0])
+                        letterCount += x;
+                        waiting = false;
+                    }, 1000)
+                } else if (letterCount === words[0].length + 1 && waiting === false) {
+                    waiting = true;
+                    window.setTimeout(function () {
+                        x = -1;
+                        letterCount += x;
+                        waiting = false;
+                    }, 1000)
+                } else if (waiting === false) {
+                    target.innerHTML = words[0].substring(0, letterCount)
+                    letterCount += x;
+                }
+            }, 120)
+            window.setInterval(function () {
+                if (visible === true) {
+                    con.className = 'console-underscore hidden'
+                    visible = false;
+
+                } else {
+                    con.className = 'console-underscore'
+
+                    visible = true;
+                }
+            }, 400)
+        }
+    </script>
+</body>
+
+</html>

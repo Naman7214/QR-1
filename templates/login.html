@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Student Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #D3E3F1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            /* 100% of the viewport height */
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #4682B4;
+            /* Steel Blue */
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+            color: #4682B4;
+            /* Steel Blue */
+        }
+
+        input {
+            width: 100%;
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #87CEEB;
+            /* Sky Blue border */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+            background-color: #4682B4;
+            /* Steel Blue */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Overlapping Circle */
+        .circle {
+            position: absolute;
+            top: -35px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: #87CEEB;
+            /* Sky Blue */
+            border-radius: 50%;
+        }
+
+        .triangle {
+            z-index: -1;
+            position: absolute;
+            bottom: -25px;
+            right: -80px;
+            width: 0;
+            height: 0;
+            border-left: 75px solid transparent;
+            border-right: 75px solid transparent;
+            border-bottom: 130px solid #87CEEB;
+            /* Sky Blue */
+            border-radius: 0;
+            transform: rotate(90deg);
+        }
+
+        .square {
+            position: absolute;
+            top: -25px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: #87CEEB;
+            /* Sky Blue */
+            border-radius: 0;
+            transform: rotate(45deg);
+            z-index: -1;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 600px) {
+
+            .circle,
+            .triangle,
+            .square {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="circle"></div>
+        <div class="square"></div>
+        <h1>Student Login</h1>
+        <form id="loginForm" method="post" action="/login">
+            <label for="roll_no">Roll Number:</label>
+            <input type="text" id="roll_no" name="roll_no" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <button type="submit">Login</button>
+        </form>
+        <!-- Display error message if there is an error -->
+        {% if error %}
+        <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <div class="triangle"></div>
+    </div>
+</body>
+</html>

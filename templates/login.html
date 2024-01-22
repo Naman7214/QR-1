@@ -132,10 +132,25 @@
                 display: none;
             }
         }
+        #home {
+            background-color: #e91c1c;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width:85px;
+        }
     </style>
 </head>
 
 <body>
+    <button class="btn btn-success" id="home" onclick="navigateToHome()">Home</button>
     <div class="container">
         <div class="circle"></div>
         <div class="square"></div>
@@ -155,5 +170,11 @@
         {% endif %}
         <div class="triangle"></div>
     </div>
+    <script>
+        function navigateToHome() {
+            // Replace with the actual URL you want to navigate to
+            window.location.href = "/";
+        }
+    </script>
 </body>
 </html>

@@ -132,9 +132,9 @@
             left: 10px;
         }
 
-        footer {
+        .footer {
             position: absolute;
-            bottom: 10px;
+            bottom: 20px;
             /* Adjust as needed */
             text-align: center;
             width: 100%;
@@ -207,22 +207,33 @@
             .hovermobile {
                 display: inline-block;
             }
+            
+            #options{
+                flex-direction: column;
+                /* margin: auto; */
+                gap: 0;
+            }
 
             .head1 {
                 display: flex;
                 flex-direction: column;
                 font-size: small;
                 font-weight: bold;
-                /* justify-content: center; */
                 align-items: center;
-                top: 0;
+                position: absolute;
+                top: 10px;
+                left: 0;
+                right: 0;
+                text-align: center;
             }
 
             .head1>img {
                 height: 120px;
                 width: 120px;
             }
+           
         }
+
 
         @media only screen and (min-width: 769px) {
             .hovermobile {
@@ -241,6 +252,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             transition: .5s;
+        
         }
     </style>
 </head>
@@ -263,24 +275,23 @@
             <p style="margin-bottom: 0;">Re Accredited by NBA ( Electrical Engg and Mechanical Engg) | Recognized under
                 2(f) and 12(B) of UGC Act
                 1956 | ISO 9001:2015 certified</p> -->
-            
+
             <p id="project-name">ITATS:</p> <!-- Highlighted project name -->
             <div class='console-container'><span id='text'></span>
                 <div class='console-underscore' id='console'>&#95;</div>
             </div>
 
-            <footer>
+            <div class="footer">
                 <h3> <a href="/developers" class="hover">Developer Information Here</a></h3>
-            </footer>
+            </div>
         </div>
         <div class="right">
             <div class="head1">
                 <img src="/static/logo.png" alt="logo">
                 <div class="collegename">
                     <p>Marathwada Mitramandal’s</p>
-                    <p style="margin-top: 0px;">COLLEGE OF ENGINEERING</p>
-                    <p style="margin-top: 0px;">Karvenagar, Pune</p>
-                    <p style="font-size: 2em; font-weight: bold; margin-top: 5px;">Department of Information Technology
+                    <p>COLLEGE OF ENGINEERING Karvenagar, Pune</p>
+                    <p style="font-size: 1rem; font-weight: bold; margin-top: 5px;">Department of Information Technology
                     </p>
                 </div>
                 <h1 style="text-align: center;">QR Based Attendance System</h1>
@@ -290,22 +301,24 @@
                     <a href="{{ url_for('admin_login') }}" id="teacher">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </a>
-                    <span style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as Teacher</span>
+                    <p style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as
+                        Teacher</p>
                 </div>
                 <div style="padding: 10px;">
 
                     <a href="{{ url_for('login') }}" id="student">
                         <i class="fas fa-user-graduate"></i>
                     </a>
-                    <span style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as Student</span>
+                    <p style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as
+                        Student</p>
 
                 </div>
             </div>
 
 
-            <footer>
+            <div class="footer">
                 <h3> <a href="/developers" class="hovermobile">Developer Information Here</a></h3>
-            </footer>
+            </div>
         </div>
     </div>
 

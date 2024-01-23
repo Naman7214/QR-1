@@ -196,28 +196,6 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
 
 
 
-def generate_bar_graph(analytics_data):
-    # Generate bar graph using Matplotlib
-    days_of_week = list(analytics_data.keys())
-    attendance_percentage = list(analytics_data.values())
-
-    plt.bar(days_of_week, attendance_percentage)
-    plt.xlabel('Days of the Week')
-    plt.ylabel('Percentage of Students Present')
-    plt.title('Attendance Analytics')
-    plt.ylim(0, 100)  # Set y-axis limit to percentage range
-
-    # Save the plot to a BytesIO object
-    img_buffer = BytesIO()
-    plt.savefig(img_buffer, format='png')
-    img_buffer.seek(0)
-    plt.close()
-
-    # Convert the BytesIO object to base64 for embedding in HTML
-    img_str = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
-
-
-
 def generate_analytics_data():
     # Fetch attendance records from Temp_attendance table
     total = query_db('SELECT * FROM Temp_attendance')
@@ -237,6 +215,10 @@ def generate_analytics_data():
     # Create a bar graph using plotly
     fig = make_subplots(rows=1, cols=1, subplot_titles=['Attendance Percentage by Day of the Week'])
     trace = go.Bar(x=days_of_week, y=attendance_percentage, name='Attendance Percentage')
+
+    # Set the y-axis range to 0 to 100
+    fig.update_yaxes(range=[0, 100], title_text='Percentage')
+
     fig.add_trace(trace)
 
     # Convert the plot to HTML

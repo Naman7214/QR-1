@@ -92,9 +92,14 @@
       background-color: #8B8000;
       color: white;
     }
-
+    
     #adminDashboard {
       background-color: #2196F3;
+      color: white;
+    }
+    
+    #analytics{
+      background-color: #9000fe;
       color: white;
     }
 
@@ -163,6 +168,7 @@
         <a href="{{ url_for('te_tt') }}"><button id="generateQR">Generate QR Code</button></a>
         <a href="{{ url_for('admin_dashboard') }}"><button id="adminDashboard">Admin Dashboard</button></a>
         <a href="{{ url_for('studentcnt') }}"><button id="studentcnt">Student Count</button></a>
+        <a href="{{ url_for('analytics') }}"><button id="analytics">Attendance Analytics</button></a>
         <button id="adminProfile" onclick="openAdminProfileModal()">Admin Profile</button>
         <a href="{{ url_for('admin_logout') }}"><button id="adminLogout">Logout</button></a>
       </div>

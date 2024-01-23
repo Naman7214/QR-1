@@ -22,7 +22,7 @@
         }
 
         .left {
-            background-color: rgb(0, 118, 137);
+            background-color: rgb(0, 192, 221);
             /* width: 100%; */
             flex: 1;
             height: 100vh;
@@ -64,6 +64,20 @@
             margin: 10px 0 10px 0;
             /* Add margin-bottom for spacing between paragraphs */
         }
+
+        .collegename p {
+            font-family: 'Arial', sans-serif;
+            
+        }
+
+        .collegename p:nth-child(4) {
+            font-family: 'Arial Bold', sans-serif;
+            /* Note: Arial Bold may not exist, choose an appropriate bold version if available */
+            font-size: 2rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
 
         .right {
             background-color: rgba(255, 255, 255, 0.836);
@@ -144,7 +158,7 @@
         .hover {
             color: #0000;
             background:
-                radial-gradient(circle, rgb(0, 0, 0) 28%, rgb(0, 0, 255) 53%, rgb(0, 0, 0) 100%) var(--c, 0%)/200% no-repeat;
+                radial-gradient(circle, rgb(0, 0, 0) 28%, rgb(44, 1, 214) 53%, rgb(0, 0, 0) 100%) var(--c, 0%)/200% no-repeat;
             -webkit-background-clip: text;
             background-clip: text;
             transition: .5s;
@@ -263,7 +277,7 @@
             <p style="margin-bottom: 0;">Re Accredited by NBA ( Electrical Engg and Mechanical Engg) | Recognized under
                 2(f) and 12(B) of UGC Act
                 1956 | ISO 9001:2015 certified</p> -->
-            
+
             <p id="project-name">ITATS:</p> <!-- Highlighted project name -->
             <div class='console-container'><span id='text'></span>
                 <div class='console-underscore' id='console'>&#95;</div>
@@ -290,14 +304,16 @@
                     <a href="{{ url_for('admin_login') }}" id="teacher">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </a>
-                    <span style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as Teacher</span>
+                    <span style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as
+                        Teacher</span>
                 </div>
                 <div style="padding: 10px;">
 
                     <a href="{{ url_for('login') }}" id="student">
                         <i class="fas fa-user-graduate"></i>
                     </a>
-                    <span style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as Student</span>
+                    <span style="margin-top: 5px; font-weight: bold; font-size: 1em; text-align: center;">Continue as
+                        Student</span>
 
                 </div>
             </div>
@@ -311,7 +327,7 @@
 
     <script>
         // function([string1, string2],target id,[color1,color2])    
-        consoleText(['IT Attendance Management System', 'Real-time attendance, no room for fakes', 'Student-Crafted Excellence', 'Scan, Sync, Succeed: ITATS revolutionizes attendance', 'Smart Attendance, Smarter Dashboard', 'Effortless Analytics'], 'text', ['lightblue']);
+        consoleText(['IT Attendance Management System', 'Real-time attendance, no room for fakes', 'Student-Crafted Excellence', 'Scan, Sync, Succeed: ITATS revolutionizes attendance', 'Smart Attendance, Smarter Dashboard', 'Effortless Analytics'], 'text', ['blue']);
 
         function consoleText(words, id, colors) {
             if (colors === undefined) colors = ['#fff'];

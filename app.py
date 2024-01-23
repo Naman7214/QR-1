@@ -8,6 +8,10 @@ import base64
 import sqlite3
 import re
 from datetime import datetime
+from io import BytesIO
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+
 
 
 app = Flask(__name__)
@@ -131,11 +135,6 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
 
     instructor_id = query_db('SELECT teacher_id FROM Admins WHERE Acronym = ?' , (instructor,))
     
-    
-    print(instructor)
-    print(instructor_id)
-    print(session['teacher_id'])
-    print(teacher_id)
    
 
     if instructor_id and 'teacher_id' in instructor_id[0]:
@@ -197,7 +196,53 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
 
 
 
+def generate_bar_graph(analytics_data):
+    # Generate bar graph using Matplotlib
+    days_of_week = list(analytics_data.keys())
+    attendance_percentage = list(analytics_data.values())
 
+    plt.bar(days_of_week, attendance_percentage)
+    plt.xlabel('Days of the Week')
+    plt.ylabel('Percentage of Students Present')
+    plt.title('Attendance Analytics')
+    plt.ylim(0, 100)  # Set y-axis limit to percentage range
+
+    # Save the plot to a BytesIO object
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format='png')
+    img_buffer.seek(0)
+    plt.close()
+
+    # Convert the BytesIO object to base64 for embedding in HTML
+    img_str = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+
+
+
+def generate_analytics_data():
+    # Fetch attendance records from Temp_attendance table
+    total = query_db('SELECT * FROM Temp_attendance')
+    attendance_records = query_db('SELECT * FROM Temp_attendance WHERE attendance = 1')
+
+    # Calculate attendance percentage for each day of the week
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    attendance_count = {day: 0 for day in days_of_week}
+    total_count = len(total)
+
+    for record in attendance_records:
+        day_of_week = datetime.strptime(record['date'], '%Y-%m-%d').strftime('%A')
+        attendance_count[day_of_week] += 1
+
+    attendance_percentage = [count / total_count * 100 if total_count > 0 else 0 for count in attendance_count.values()]
+
+    # Create a bar graph using plotly
+    fig = make_subplots(rows=1, cols=1, subplot_titles=['Attendance Percentage by Day of the Week'])
+    trace = go.Bar(x=days_of_week, y=attendance_percentage, name='Attendance Percentage')
+    fig.add_trace(trace)
+
+    # Convert the plot to HTML
+    plot_html = fig.to_html(full_html=False)
+
+    return plot_html
 
 # Initialize the database
 with app.app_context():
@@ -542,6 +587,11 @@ def attendance_summary():
 
 
 
+
+@app.route('/analytics')
+def analytics():
+    analytics_data = generate_analytics_data()
+    return render_template('analytics.html', plot_html=analytics_data)
 
 
 

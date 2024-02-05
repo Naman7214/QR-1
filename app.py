@@ -1182,7 +1182,7 @@ def login():
                     # Device names do not match, return an error
                     return render_template('login.html', error='Device mismatch. Please log in from the registered device.')
             else:
-                if device_name == "Linux; Android 10; K":
+                if device_name == "Linux; Android 10; K" or device_name == "Windows NT 10.0; Win64; x64":
                      return render_template('login.html', error='Please Login using Opera Browser Only and Not any other browser')
                 else:
                     db = get_db()

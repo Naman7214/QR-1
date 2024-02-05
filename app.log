@@ -43,3 +43,18 @@ Traceback (most recent call last):
   File "/home/ubuntu/itats/app.py", line 102, in read_sql_query
     cur.execute(sql)
 sqlite3.OperationalError: no such column: rollno
+Exception on /prompt [POST]
+Traceback (most recent call last):
+  File "/home/ubuntu/itats/myenv/lib/python3.10/site-packages/flask/app.py", line 1463, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/itats/myenv/lib/python3.10/site-packages/flask/app.py", line 872, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/itats/myenv/lib/python3.10/site-packages/flask/app.py", line 870, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/itats/myenv/lib/python3.10/site-packages/flask/app.py", line 855, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/home/ubuntu/itats/app.py", line 1769, in prompt
+    sql_query_result = read_sql_query(sql_response, "students.db")
+  File "/home/ubuntu/itats/app.py", line 103, in read_sql_query
+    cur.execute(sql)
+sqlite3.OperationalError: no such table: ITattendance

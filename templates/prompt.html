@@ -71,10 +71,26 @@
         .chat-input button:hover {
             background-color: #0056b3;
         }
+        #home {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            position: absolute;
+            top: 0;
+            left: 10px;
+            padding : 10px;
+            border-radius: 5px ;
+            font-size: 15px;
+            width: 75px;
+        }
+
+        
     </style>
 </head>
 <body>
-
+    <button class="btn btn-danger" id="home" onclick="navigateToHome()">Home</button>
     <div class="chat-container">
         <div class="chat-messages">
             {% if response %}
@@ -93,6 +109,11 @@
             </form>
         </div>
     </div>
-
+<script>
+    function navigateToHome() {
+        // Replace with the actual URL you want to navigate to
+        window.location.href = "/admin_options";
+    }
+</script>
 </body>
 </html>

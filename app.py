@@ -442,7 +442,7 @@ subjects_by_year = {
             'BE': ['SGP', 'AEDC', 'SG', 'IL', 'PSD']
         }
 
-
+Also here SE refers to second year, TE refers to Third year and BE means fourth and final year.
 
 
 \n\nFor example, 
@@ -564,6 +564,9 @@ TOS : Stands for time of scan and denotes the time at which student scaned the Q
     time TIME,
     attendance BOOLEAN
     , teacher_id INTEGER, year VARCHAR, QR_time TEXT, Flag Boolean, TOS TOS VARCHAR),
+
+
+Also here SE refers to second year, TE refers to Third year and BE means fourth and final year.
 
 Explanation:
 This table stores attendance records of all  students of AInDS department.

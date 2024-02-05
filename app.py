@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file, jsonify, session, g, flash
-
+import threading
+import time
 import random
 import qrcode
 import io
@@ -957,7 +958,7 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
 
 
 
-    if department == 'AInDS':
+    elif department == 'AInDS':
         if year == 'SE':
             students = query_db('SELECT roll_no, name FROM students WHERE year =? and Department = ?', (year,department,))
             db = get_db()
@@ -968,16 +969,6 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
                 db.commit()
 
         elif year == 'TE':
-            if subject_name == "CS" or subject_name == "CC":
-                students = query_db('SELECT roll_no, name FROM students WHERE elective1 = ?', (subject_name,))
-                if students is not None:
-                    db = get_db()
-                    for student in students:
-                        db.execute('INSERT INTO AInDS_attendance (rollno, stdname, subject, date, time, attendance, teacher_id, year, QR_time, Flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                                (student['roll_no'], student['name'], subject_name, date, time_slot, 0, teacher_id, year, current_time, Flag))
-                    db.commit()
-
-            else:
                 students = query_db('SELECT roll_no, name FROM students where year = ? AND Department = ?', (year, department,))
                 db = get_db()
                 for student in students:
@@ -985,24 +976,6 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
                             (student['roll_no'], student['name'], subject_name, date, time_slot, 0, session['teacher_id'], year, current_time, Flag))
 
                 db.commit()
-
-        else:
-            if subject_name == "NLP" or subject_name == "SC" or subject_name == "BAI" or subject_name == "BT":
-                students = query_db('SELECT roll_no, name FROM students where elective1 =? OR elective2 = ?', (subject_name, subject_name,))
-                if students is not None:
-                    db = get_db()
-                    for student in students:
-                        db.execute('INSERT INTO AInDS_attendance (rollno, stdname, subject, date, time, attendance, teacher_id, year, QR_time, Flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                            (student['roll_no'], student['name'], subject_name, date, time_slot, 0, session['teacher_id'], year, current_time, Flag))
-                    db.commit()
-            else:
-                students = query_db('SELECT roll_no, name FROM students where year = ? AND Department = ?', (year, department,))
-                db = get_db()
-                for student in students:
-                    db.execute('INSERT INTO AInDS_attendance (rollno, stdname, subject, date, time, attendance, teacher_id, year, QR_time, Flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,, ?)',
-                            (student['roll_no'], student['name'], subject_name, date, time_slot, 0, session['teacher_id'], year, current_time, Flag))
-                db.commit()
-
 
 
     else:
@@ -1439,6 +1412,7 @@ def teacher_dashboard():
         time_slot = request.form['time_slot']
         date = request.form['date']
         year = request.form['year']
+
         if department == "IT":
             
         # Run a query to fetch relevant records based on selected criteria

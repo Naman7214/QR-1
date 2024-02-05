@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Student Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #D3E3F1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+            /* 100% of the viewport height */
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+            background-color: #FFFFFF;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #4682B4;
+            /* Steel Blue */
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 8px;
+            color: #4682B4;
+            /* Steel Blue */
+        }
+
+        input {
+            width: 100%;
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #87CEEB;
+            /* Sky Blue border */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+            background-color: #4682B4;
+            /* Steel Blue */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Overlapping Circle */
+        .circle {
+            position: absolute;
+            top: -45px;
+            left: -55px;
+            width: 150px;
+            height: 150px;
+            background-color: #87CEEB;
+            /* Sky Blue */
+            border-radius: 50%;
+        }
+
+        .triangle {
+            z-index: -1;
+            position: absolute;
+            bottom: -25px;
+            right: -80px;
+            width: 0;
+            height: 0;
+            border-left: 75px solid transparent;
+            border-right: 75px solid transparent;
+            border-bottom: 130px solid #87CEEB;
+            /* Sky Blue */
+            border-radius: 0;
+            transform: rotate(90deg);
+        }
+
+        .square {
+            position: absolute;
+            top: -25px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background-color: #87CEEB;
+            /* Sky Blue */
+            border-radius: 0;
+            transform: rotate(45deg);
+            z-index: -1;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 600px) {
+
+            .circle,
+            .triangle,
+            .square {
+                display: none;
+            }
+        }
+        #home {
+            background-color: #e91c1c;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width:85px;
+        }
+
+        #flash-messages {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .alert {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: #f8d7da; /* Example: light red background for error messages */
+            color: #721c24; /* Dark red text */
+            border-radius: 5px;
+            border: 1px solid #f5c6cb;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <p style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 99px; text-align: center;">QR Based Attendance System</p>
+    <button class="btn btn-success" id="home" onclick="navigateToHome()">Home</button>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div id="flash-messages">
+          {% for message in messages %}
+            <div class="alert">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <div class="container">
+        <div class="circle"></div>
+        <div class="square"></div>
+        <h1>Reset Password</h1>
+        <form id="resetPasswordForm" method="post" action="/reset_password">
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" required>
+            <br>
+            <label for="confirm_password">Confirm New Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+            <br>
+            <button type="submit">Reset Password</button>
+        </form>
+        <!-- Display error message if there is an error -->
+        {% if error %}
+        <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <div class="triangle"></div>
+    </div>
+    <script>
+        function navigateToHome() {
+            window.location.href = "/admin_options";
+        }
+    </script>
+</body>
+</html>

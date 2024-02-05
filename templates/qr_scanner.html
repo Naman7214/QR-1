@@ -213,7 +213,7 @@
                   var profile = JSON.parse(xhr.responseText);
                   document.getElementById('profileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no;
                  // document.getElementById('modalProfileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no + ', user_ip: ' + profile.ip_address + ' , MAC Address: ' + profile.mac_address;
-                  document.getElementById('modalProfileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no + ', Device name: ' + profile.device_name ;
+                  document.getElementById('modalProfileText').innerText = 'Name: ' + profile.username + ', Roll No: ' + profile.roll_no ;
               } else {
                   console.error('Failed to retrieve user profile');
               }

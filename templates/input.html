@@ -92,11 +92,13 @@
         </select>
         <br/>
 
+        <input type="hidden" id="department" value="{{ department }}">
+
         
 
         <label for="subject_name">Subject Name:</label>
         <select id="subject_name" name="subject_name" required class="form-select">
-            <option value="WAD" {% if request.args.get('subject_name') == 'WAD' %}selected{% endif %}>WAD</option>
+            <!-- <option value="WAD" {% if request.args.get('subject_name') == 'WAD' %}selected{% endif %}>WAD</option>
             <option value="DSBDA" {% if request.args.get('subject_name') == 'DSBDA' %}selected{% endif %}>DSBDA</option>
             <option value="CC" {% if request.args.get('subject_name') == 'CC' %}selected{% endif %}>CC</option>
             <option value="CNS" {% if request.args.get('subject_name') == 'CNS' %}selected{% endif %}>CNS</option>
@@ -111,7 +113,7 @@
             <option value="NLP" {% if request.args.get('subject_name') == 'NLP' %}selected{% endif %}>NLP</option>
             <option value="SC" {% if request.args.get('subject_name') == 'SC' %}selected{% endif %}>SC</option>
             <option value="BAI" {% if request.args.get('subject_name') == 'BAI' %}selected{% endif %}>BAI</option>
-            <option value="BT" {% if request.args.get('subject_name') == 'BT' %}selected{% endif %}>BT</option>
+            <option value="BT" {% if request.args.get('subject_name') == 'BT' %}selected{% endif %}>BT</option> -->
 
 
             <!-- Add more subjects as needed -->
@@ -149,9 +151,9 @@
     }
 
     // Set both min and max attributes of the date input to the current date
-    const currentDate = new Date().toISOString().split('T')[0];
-    document.getElementById('date').min = currentDate;
-    document.getElementById('date').max = currentDate;
+    // const currentDate = new Date().toISOString().split('T')[0];
+    // document.getElementById('date').min = currentDate;
+    // document.getElementById('date').max = currentDate;
 
     // JavaScript code to handle error message
     document.addEventListener("DOMContentLoaded", function () {
@@ -163,7 +165,7 @@
             errorMessageDiv.innerText = errorMessage;
         }
         const dateInput = document.getElementById('date');
-    const currentDateParam = urlParams.get('date');
+        const currentDateParam = urlParams.get('date');
 
     if (currentDateParam) {
         dateInput.value = currentDateParam;
@@ -173,6 +175,55 @@
         dateInput.value = currentDate;
     }
     });
+
+
+    function updateSubjectDropdown(department, selectedSubject) {
+            const subjectDropdown = document.getElementById('subject_name');
+            subjectDropdown.innerHTML = ''; // Clear existing options
+
+            let subjects = [];
+            if (department === 'IT') {
+                subjects = ['WAD', 'DSBDA', 'CC', 'CNS', 'CS','DBMS','PA','CG','SE','EM-3','DS','SnE','NLP','SC','BAI','BT'];
+                
+            } else if (department === 'Electrical') {
+                subjects = ['NA', 'PS-1', 'NMCP', 'FMA','CADEM','CSE','PS-2','EM','PSD','SGP','AEDC','IL','SG'];
+                
+            } else if(department === "AInDS"){
+                subjects = ['STAT','DSA','IOT','MIS','SE','DS','CS','ANN','SMA']
+            }
+
+            // Populate the dropdown with new options
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                if (subject === selectedSubject) {
+                    option.selected = true;
+                }
+                subjectDropdown.appendChild(option);
+            });
+        }
+
+        // Function to get URL parameters
+        function getURLParameter(name) {
+            return new URLSearchParams(window.location.search).get(name);
+        }
+
+        // Call this function on page load
+        document.addEventListener("DOMContentLoaded", function () {
+            const department = document.getElementById('department').value;
+            const selectedSubject = getURLParameter('subject_name') || '';
+            updateSubjectDropdown(department, selectedSubject);
+
+            // Set other form fields based on URL parameters
+            // Example for year
+            const selectedYear = getURLParameter('year');
+            if (selectedYear) {
+                document.getElementById('year').value = selectedYear;
+            }
+
+            // Repeat for other fields like time_slot, date, etc.
+        });
 </script>
 </body>
 </html>

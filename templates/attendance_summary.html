@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #home {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            position: absolute;
+            top: 0;
+            left: 10px;
+            padding : 10px;
+            border-radius: 5px ;
+            font-size: 15px;
+            width: 75px;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="btn btn-danger" id="home" onclick="navigateToHome()">Home</button>
+    <div class="container">
+        <h2>Attendance Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Roll No</th>
+                    {% for subject in total_lectures.keys() %}
+                        <th>{{ subject }} ({{ total_lectures[subject] }})</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for roll_no, subjects in attendance_summary.items() %}
+                    <tr>
+                        <td>{{ roll_no }}</td>
+                        {% for subject in total_lectures.keys() %}
+                            <td>{{ subjects.get(subject, 0) }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    function navigateToHome() {
+        // Replace with the actual URL you want to navigate to
+        window.location.href = "/admin_options";
+    }
+</script>
+</html>

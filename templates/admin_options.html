@@ -93,7 +93,7 @@
       color: white;
     }
     
-    #adminDashboard {
+    #teacherDashboard {
       background-color: #2196F3;
       color: white;
     }
@@ -103,12 +103,28 @@
       color: white;
     }
 
+    #summary{
+      background-color : #676b88;
+      color: white;
+    }
+
+    #chat{
+      background-color: #54d7ff;
+      color: white;
+    }
+
     #adminProfile {
       background-color: #FF9800;
       color: white;
     }
 
     #adminLogout {
+      background-color: #F44336;
+      color: white;
+      height: 72px;
+    }
+
+    #reset{
       background-color: #F44336;
       color: white;
     }
@@ -155,6 +171,20 @@
     .modal-body {
       padding: 16px;
     }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .button-group a {
+      width: 48%; /* Adjust width as needed */
+      text-decoration: none;
+    }
+
+    .button-group button {
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -165,12 +195,18 @@
     </div>
     <div id="right-side">
       <div id="options">
-        <a href="{{ url_for('te_tt') }}"><button id="generateQR">Generate QR Code</button></a>
-        <a href="{{ url_for('admin_dashboard') }}"><button id="adminDashboard">Admin Dashboard</button></a>
+        <button id="generateQR" onclick = redirect()>Generate QR Code</button>
+        <a href="{{ url_for('teacher_dashboard') }}"><button id="teacherDashboard">Teacher Dashboard</button></a>
         <a href="{{ url_for('studentcnt') }}"><button id="studentcnt">Student Count</button></a>
         <a href="{{ url_for('analytics') }}"><button id="analytics">Attendance Analytics</button></a>
+        <a href="{{ url_for('attendance_summary_by_student') }}"><button id="summary">Attendance Summary</button></a>
+        <a href="{{url_for('prompt')}}"><button id = "chat">Chat Bot</button></a>
         <button id="adminProfile" onclick="openAdminProfileModal()">Admin Profile</button>
-        <a href="{{ url_for('admin_logout') }}"><button id="adminLogout">Logout</button></a>
+        <!-- Grouped buttons -->
+        <div class="button-group">
+          <a href="{{url_for('reset')}}"><button id="reset">Reset Password</button></a>
+          <a href="{{ url_for('admin_logout') }}"><button id="adminLogout">Logout</button></a>
+        </div>
       </div>
     </div>
   </div>
@@ -186,6 +222,11 @@
   </div>
 
   <script>
+
+    function redirect(){
+      window.location.href = "/Check_route"
+
+    }
     // Function to get admin profile information from the server
     function getAdminProfile() {
       var xhr = new XMLHttpRequest();

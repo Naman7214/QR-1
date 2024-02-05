@@ -14,7 +14,7 @@ from plotly.subplots import make_subplots
 import google.generativeai as genai
 import logging
 from logging.handlers import RotatingFileHandler
-
+from retry import retry
 
 app = Flask(__name__)
 app.config['DATABASE'] = 'students.db'
@@ -91,7 +91,7 @@ def generate_qr_code(qr_data):
     return img_str
 
 
-
+@retry(tries=3, delay=2, backoff=2)
 def get_gemini_response(question,prompt):
     model = genai.GenerativeModel('gemini-pro')
     response=model.generate_content([prompt[0],question])
@@ -110,6 +110,7 @@ def read_sql_query(sql,db):
 
 prompt1=[
     """
+    Make sure you also respond to basic greetings from user by not trying them to convert to SQL query
     You are an expert in converting English questions to SQL query!
     The SQL database has the name students and has the following tables:
 
@@ -1762,20 +1763,29 @@ def prompt():
         # Get the SQL query response
         sql_response = get_gemini_response(user_input, prompt1)
         print(sql_response)
+        
         if sql_response == "Can't do that!!":
             return render_template('prompt.html', user_input=user_input, response=sql_response)
 
-        # Execute the SQL query and format the result
-        sql_query_result = read_sql_query(sql_response, "students.db")
-        formatted_sql_result = ', '.join([' '.join(map(str, row)) for row in sql_query_result])
-        #test
-        # Combine user input and SQL query result for context
-        combined_context = f"User query: {user_input}. SQL result: {formatted_sql_result}"
+        # Check if the response is a valid SQL query
+        try:
+            # Attempt to execute the SQL query and format the result
+            sql_query_result = read_sql_query(sql_response, "students.db")
+            formatted_sql_result = ', '.join([' '.join(map(str, row)) for row in sql_query_result])
 
-        # Pass the combined context for the final response
-        final_response = get_gemini_response(combined_context, prompt2)
+            # Combine user input and SQL query result for context
+            combined_context = f"User query: {user_input}. SQL result: {formatted_sql_result}"
 
-        return render_template('prompt.html', user_input=user_input, response=final_response)
+            # Pass the combined context for the final response
+            final_response = get_gemini_response(combined_context, prompt2)
+
+            return render_template('prompt.html', user_input=user_input, response=final_response)
+
+        except Exception as e:
+            # If there's an exception, it means the response is not a valid SQL query
+            # Handle the situation by printing the text
+            print(f"Response is not a valid SQL query: {sql_response}")
+            return render_template('prompt.html', user_input=user_input, response=sql_response)
 
     return render_template('prompt.html', response=None)
 

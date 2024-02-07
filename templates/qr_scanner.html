@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Scanner</title>
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     body {
@@ -105,7 +105,8 @@
 
 <body>
   <h1>QR Scanner</h1>
-  <div id="preview"></div>  
+  <video id="preview"></video>
+  <button id="switchCamera">Switch Camera</button>
   <div id="profile">
     <p id="profileText">Loading profile...</p>
     <button id="viewProfile" onclick="openProfileModal()">View Profile</button>
@@ -123,40 +124,58 @@
   </div>
 
   <script>
+    let scanner;
+let currentCameraIndex = 0;
+let cameras = [];
 
-    // Function to initialize the QR scanner
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeQRScanner();
-      getUserProfile();
-    });
-
-    function initializeQRScanner() {
-      var html5QrCode = new Html5Qrcode("preview");
-      const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-      Html5Qrcode.getCameras().then(cameras => {
-        if (cameras.length > 0) {
-          const cameraId = cameras[0].id; // Use the first camera
-          html5QrCode.start(cameraId, config, decodedText => {
-            // On QR code scan success
-            console.log(`QR Code detected: ${decodedText}`);
-            sendQRCodeToServer(decodedText); // Send QR code to server
-            html5QrCode.stop().then(() => {
-              console.log("QR Scanning stopped.");
-            }).catch(err => {
-              console.error("Unable to stop QR scanner", err);
-            });
-          }).catch(err => {
-            console.error("Error starting QR scanner", err);
-          });
-        } else {
-          console.error("No cameras found.");
-          alert("No cameras found. Ensure your camera is enabled and try again.");
-        }
-      }).catch(err => {
-        console.error("Error getting cameras", err);
-      });
+function initializeQRScanner() {
+  console.log('Initializing QR scanner...');
+  Instascan.Camera.getCameras().then(function (availableCameras) {
+    cameras = availableCameras;
+    if (cameras.length > 0) {
+      startScanner(cameras[currentCameraIndex]);
+    } else {
+      console.error('No cameras found.');
+      alert('No cameras found. Please ensure your device has a camera.');
     }
-    
+  }).catch(function (e) {
+    console.error('Error initializing cameras', e);
+  });
+  
+  getUserProfile();  // Load user profile
+}
+
+function startScanner(camera) {
+  scanner = new Instascan.Scanner({
+    video: document.getElementById('preview'),
+    mirror: false,
+  });
+  
+  scanner.addListener('scan', function (content) {
+    console.log('QR code detected:', content);
+    sendQRCodeToServer(content);
+  });
+  
+  scanner.start(camera).catch(function (e) {
+    console.error('Error starting scanner', e);
+  });
+}
+
+function switchCamera() {
+  if (cameras.length > 1) {
+    currentCameraIndex = (currentCameraIndex + 1) % cameras.length;
+    scanner.stop().then(function () {
+      startScanner(cameras[currentCameraIndex]);
+    });
+  } else {
+    alert('No additional camera to switch to.');
+  }
+}
+
+document.getElementById('switchCamera').addEventListener('click', function() {
+  switchCamera();
+});
+
     // Function to send the detected QR code to the server
     function sendQRCodeToServer(qrCode) {
     console.log('QR code detected:', qrCode);
@@ -235,7 +254,8 @@
     }
 
     // Call the initialization function
-    
+    initializeQRScanner();
+    console.log('User IP:', "{{ session.get('user_ip') }}");
   </script>
 
 </body>

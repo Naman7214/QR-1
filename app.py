@@ -1005,7 +1005,7 @@ def generate_qr_code_from_input(subject_name, time_slot, date, year, instructor)
                 students = query_db('SELECT roll_no, name FROM students where year = ? AND Department = ?', (year, department,))
                 db = get_db()
                 for student in students:
-                    db.execute('INSERT INTO Elec_attendance (rollno, stdname, subject, date, time, attendance, teacher_id, year, QR_time, Flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,, ?)',
+                    db.execute('INSERT INTO Elec_attendance (rollno, stdname, subject, date, time, attendance, teacher_id, year, QR_time, Flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                             (student['roll_no'], student['name'], subject_name, date, time_slot, 0, session['teacher_id'], year, current_time, Flag))
                 db.commit()
 
